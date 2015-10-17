@@ -26,7 +26,7 @@ Xf_STT::Xf_STT(
   Oxs_Director* newdtr, // App director
   const char* argstr)   // MIF input block parameters
   : Oxs_Energy(name,newdtr,argstr),
-    number_of_stages(0), mesh_id(0)
+    mesh_id(0), number_of_stages(0)
 {
   // Process arguments
   number_of_stages = GetUIntInitValue("stage_count",0);
@@ -229,7 +229,7 @@ void Xf_STT::UpdateMeshArrays(const Oxs_Mesh* mesh) const
   B.AdjustSize(mesh);
 
   const OC_INDEX size = mesh->Size();
-  OC_INDEX i,j;
+  OC_INDEX i;
   for(i=0;i<size;i++) {
     OC_REAL8m beta = A[i] * beta_factor; // A[i] holds J(i)
     /// This is actually (beta/gamma)*d*Ms
@@ -563,7 +563,7 @@ void Xf_STT::UpdateSpinTorqueOutputs(const Oxs_SimState& state)
   }
 
   const Oxs_MeshValue<OC_REAL8m>& Ms = *(state.Ms);
-  const Oxs_MeshValue<OC_REAL8m>& Ms_inverse = *(state.Ms_inverse);
+  // const Oxs_MeshValue<OC_REAL8m>& Ms_inverse = *(state.Ms_inverse);
   const Oxs_MeshValue<ThreeVector>& spin = state.spin;
 
   OC_REAL8m Jmult = EvaluateJProfileScript(state.stage_number,
@@ -612,11 +612,11 @@ void Xf_STT::GetEnergy
 {
   OC_INDEX size = state.mesh->Size();
   const Oxs_MeshValue<ThreeVector>& spin = state.spin;
-  const Oxs_MeshValue<OC_REAL8m>& Ms = *(state.Ms);
+  // const Oxs_MeshValue<OC_REAL8m>& Ms = *(state.Ms);
   const Oxs_MeshValue<OC_REAL8m>& Ms_inverse = *(state.Ms_inverse);
   const Oxs_Mesh* mesh = state.mesh;
 
-  OC_INDEX i,j;
+  OC_INDEX i;
   if(size<1) return; // Nothing to do!
 
   if(mesh_id != state.mesh->Id()) {
